@@ -18,19 +18,19 @@
 
 namespace Algorithms
 {
-	/// <summary>Translate the string to a supported sort algorithm</summary>
-	/// <param name="algorithmName">The algorithm to use.</param>
-	/// <returns>a supported sort algorithm</returns>
-	SortAlgorithm ToSortAlgorithm(const std::string &algorithmName)
-	{
-		if (algorithmName == "HeapSort") {
-			return HeapSortAlgorithm;
-		}
+    /// <summary>Translate the string to a supported sort algorithm</summary>
+    /// <param name="algorithmName">The algorithm to use.</param>
+    /// <returns>a supported sort algorithm</returns>
+    SortAlgorithm ToSortAlgorithm(const std::string &algorithmName)
+    {
+        if (algorithmName == "HeapSort") {
+            return HeapSortAlgorithm;
+        }
 
-		if (algorithmName == "ShellSort") {
-			return ShellSortAlgorithm;
-		}
+        if (algorithmName == "ShellSort") {
+            return ShellSortAlgorithm;
+        }
 
-		return None;
-	}
+        return None;
+    }
 }

@@ -26,7 +26,7 @@
 
 
 /// <summary>
-///		Process the specified input file.
+///     Process the specified input file.
 /// </summary>
 class ProcessInputFile
 {
@@ -41,8 +41,8 @@ public:
 
 private:
     // Inputs
-	std::string	  _inputFile;
-	std::string	  _outputFile;
+    std::string   _inputFile;
+    std::string   _outputFile;
     Algorithms::SortAlgorithm _sortAlgorithm;
 
     // Working I/O streams.
@@ -75,7 +75,20 @@ public:
     /// <summary>Finalizes an instance of the <see cref="ProcessInputFile" /> class.</summary>
     /// <remarks>Let the std::unique_ptr destructor automatically clean up for us.</remarks>
     virtual ~ProcessInputFile();
+
     int Process();
+
+    /// Block the copy constructor.
+    ProcessInputFile(ProcessInputFile &) = delete;
+
+    /// Block the move constructor.
+    ProcessInputFile(ProcessInputFile &&) = delete;
+
+    /// Block the copy assignment operator.
+    ProcessInputFile operator =(ProcessInputFile &) = delete;
+
+    /// Block the move assignment operator.
+    ProcessInputFile operator =(ProcessInputFile &&) = delete;
 
 private:
     static void Consumer(void *state, const item_t &item);
@@ -84,9 +97,12 @@ private:
     static void ConsoleTrace(const std::string &msg);
 
     int Initialize();
+
     std::string ParseAndSortItemString(const std::string &itemString) const;
+
     static std::string ToItemStringFormatted(const std::string &itemStringSorted);
-    std::string ToItemStringSorted(const std::string &itemFilteredString) const;
+
+    std::string ToItemStringSorted(const std::string &itemStringFiltered) const;
 
     /// <summary>Waits for queue to empty.</summary>
     /// <param name="linesRead">The lines read.</param>

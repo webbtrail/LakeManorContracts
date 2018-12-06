@@ -1,0 +1,1 @@
+cppcheck --std=c++14 --language=c++ *.h *.cpp Algorithms/*.h Algorithms/*.cpp

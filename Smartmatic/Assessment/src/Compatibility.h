@@ -20,6 +20,8 @@
 
 bool FileExists(const std::string &filename);
 
+/// <summary>Milliseconds sleep.</summary>
+/// <param name="milliseconds">The milliseconds.</param>
 void MillisecondSleep(int milliseconds);
 
 

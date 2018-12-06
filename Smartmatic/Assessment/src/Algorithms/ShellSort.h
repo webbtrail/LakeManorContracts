@@ -25,10 +25,10 @@ namespace Algorithms
     /// <remarks>
     ///     This is actually a variant on straight insertion, but is also quite powerful.
     ///     It can be shown that for an sequence of increments that the number of operations required in
-	///     all is of order N^(3/2) for the worst possible ordering of the original data.  For "randomly"
+    ///     all is of order N^(3/2) for the worst possible ordering of the original data.  For "randomly"
     ///     ordered data, the operations count goes approximately as N^(1.25), at least for N < 60000.
     ///     For N > 50, however, QuickSort is generally faster (and a significantly larger implementation).
-	/// </remarks>
+    /// </remarks>
     template <typename T> class ShellSort
     {
     public:
@@ -40,7 +40,7 @@ namespace Algorithms
         ///     The array is replaced on output by its sorted rearrangement.  Normally, the argument "m"
         ///     should be set to the size "n" of the data array, but if m &lt; data.size(), then only the first
         ///     "m" elements of the data array are sorted.  This feature is used elsewhere.
-	    /// </remarks>
+        /// </remarks>
         static void Sort(std::vector<T> &data)
         {
             return Sort(static_cast<int>(data.size()), data);
@@ -55,7 +55,7 @@ namespace Algorithms
         ///     The array is replaced on output by its sorted rearrangement.  Normally, the argument "m"
         ///     should be set to the size "n" of the data array, but if m &lt; data.size(), then only the first
         ///     "m" elements of the data array are sorted.  This feature is used elsewhere.
-	    /// </remarks>
+        /// </remarks>
         static void Sort(const int m, std::vector<T> &data)
         {
             // Determine the starting increment.

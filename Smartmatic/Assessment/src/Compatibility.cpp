@@ -13,17 +13,20 @@
 // </summary>
 // =============================================================================================================================================
 
+// ReSharper disable CppUnusedIncludeDirective
+
 #ifdef _MSC_VER
 #  include <windows.h>
 #  include <synchapi.h>
 #  include <corecrt_io.h>
 #else
+#  include <io.h>
 #  include <unistd.h>
 #endif
 
-#include "Compatibility.h"
+// ReSharper restore CppUnusedIncludeDirective
 
-#include <io.h>
+#include "Compatibility.h"
 
 
 bool FileExists(const std::string &filename)
@@ -36,11 +39,13 @@ bool FileExists(const std::string &filename)
 }
 
 
+/// <summary>Milliseconds sleep.</summary>
+/// <param name="milliseconds">The milliseconds.</param>
 void MillisecondSleep(int milliseconds)
 {
 #ifdef _MSC_VER
     Sleep(milliseconds);
 #else
-    usleep(milliseconds);
+    usleep(milliseconds * 1000);
 #endif
 }

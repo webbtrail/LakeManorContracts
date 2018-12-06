@@ -93,6 +93,18 @@ public:
         _thread.join();
     }
 
+
+    /// Block the copy constructor.
+    ItemConsumer(ItemConsumer &) = delete;
+
+    /// Block the move constructor.
+    ItemConsumer(ItemConsumer &&) = delete;
+
+    /// Block the copy assignment operator.
+    ItemConsumer operator =(ItemConsumer &) = delete;
+
+    /// Block the move assignment operator.
+    ItemConsumer operator =(ItemConsumer &&) = delete;
 };
 
 #endif //_ITEM_CONSUMER_H

@@ -44,12 +44,13 @@
 // =============================================================================================================================================
 
 #include <iostream>
-#include <io.h>
 
 #include "Algorithms/SortAlgorithm.h"
 #include "ProcessInputFile.h"
 #include "Algorithms/HeapSort.h"
-// Method prototypes:
+
+
+// Local/Static Method prototypes:
 static int  CheckApplicationArguments(char *argv[], Algorithms::SortAlgorithm &sortAlgorithm);
 static void QuickTest(char *argv[]);
 static void Usage(char *argv[]);
@@ -69,24 +70,24 @@ int main(const int argc, char *argv[])
     }
 
     Algorithms::SortAlgorithm sortAlgorithm;
-	int errorCode = CheckApplicationArguments(argv, sortAlgorithm);
-	if (errorCode < 0) {
-		exit (errorCode);
-	}
+    int errorCode = CheckApplicationArguments(argv, sortAlgorithm);
+    if (errorCode < 0) {
+        exit (errorCode);
+    }
 
     const char *pPathToInputFile  = argv[1];
     const char *pPathToOutputFile = argv[2];
 
     // Process the input file.
     auto processor = new ProcessInputFile(pPathToInputFile, pPathToOutputFile, sortAlgorithm);
-	errorCode      = processor->Process();
+    errorCode      = processor->Process();
     delete processor;
-	if (errorCode < 0) {
-		exit (errorCode);
-	}
+    if (errorCode < 0) {
+        exit (errorCode);
+    }
 
     std::cout << "Successfully completed." << std::endl;
-	exit(0);
+    exit(0);
 }
 
 
@@ -107,24 +108,24 @@ static int CheckApplicationArguments(char *argv[], Algorithms::SortAlgorithm &so
     //const char *pPathToOutputFile = argv[2];
     const   char *pAlgorithmToSort  = argv[3];
 
-	// Is the input file available/readble?
-	if (!FileExists(pPathToInputFile))
-	{
-		std::cerr << "Error:" << std::endl
+    // Is the input file available/readble?
+    if (!FileExists(pPathToInputFile))
+    {
+        std::cerr << "Error:" << std::endl
                   << "Input file '" << pPathToInputFile << "' is not found or accessible." << std::endl;
-		return -2;
-	}
+        return -2;
+    }
 
-	// Do we recognize which sort algorithm is requested?
-	sortAlgorithm = Algorithms::ToSortAlgorithm(pAlgorithmToSort);
-	if (sortAlgorithm == Algorithms::SortAlgorithm::None)
-	{
-		std::cerr << "Error:" << std::endl
+    // Do we recognize which sort algorithm is requested?
+    sortAlgorithm = Algorithms::ToSortAlgorithm(pAlgorithmToSort);
+    if (sortAlgorithm == Algorithms::SortAlgorithm::None)
+    {
+        std::cerr << "Error:" << std::endl
                   << "Sort Algorithm '" << pAlgorithmToSort << "' is not available." << std::endl;
-		return -3;
-	}
+        return -3;
+    }
 
-	return 0;
+    return 0;
 }
 
 
@@ -132,16 +133,16 @@ static int CheckApplicationArguments(char *argv[], Algorithms::SortAlgorithm &so
 /// <param name="argv">The argument vector.</param>
 static void Usage(char *argv[])
 {
-	// Pick up the whole progam executable path.
-	const std::string fullProgamPath = argv[0];
+    // Pick up the whole progam executable path.
+    const std::string fullProgamPath = argv[0];
 
-	// Trim off the last token as the application name.
-	size_t off = fullProgamPath.rfind('/');
-	if (off == std::string::npos) {
-		off = fullProgamPath.rfind('\\');
-	}
+    // Trim off the last token as the application name.
+    size_t off = fullProgamPath.rfind('/');
+    if (off == std::string::npos) {
+        off = fullProgamPath.rfind('\\');
+    }
 
-	const std::string programName = (off != std::string::npos) ? fullProgamPath.substr(off + 1) : fullProgamPath;
+    const std::string programName = (off != std::string::npos) ? fullProgamPath.substr(off + 1) : fullProgamPath;
 
     std::cout << "Usage:" << std::endl
               << programName << " <pathToInputFile> <pathToOutputFile> <algorithmToSort>" << std::endl

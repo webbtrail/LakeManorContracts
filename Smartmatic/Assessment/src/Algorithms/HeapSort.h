@@ -20,14 +20,14 @@
 
 
 namespace Algorithms
-{	
+{   
     /// <summary>The heap sort.</summary>
     /// <remarks>
     ///     While usually not quite as fast as QuickSort, HeapSort is a very popular sorting routine.
     ///     It is a true "in-place" sort, requiring no auxiallary storage.  It is an N*log2(N) process,
     ///     not only on average, but also for the worst-case order of input data.  Its worst case is
-	///     only approximately 20 percent worse than its average running time.
-	/// </remarks>
+    ///     only approximately 20 percent worse than its average running time.
+    /// </remarks>
     template <typename T> class HeapSort
     {
     public:
