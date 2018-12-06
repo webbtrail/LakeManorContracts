@@ -1,0 +1,479 @@
+# Schema: http://EditorConfig.org
+# Docs: https://docs.microsoft.com/en-us/visualstudio/ide/editorconfig-code-style-settings-reference
+
+# top-most EditorConfig file
+root = true
+
+# Don't use tabs for indentation.
+[*]
+indent_style = space
+insert_final_newline = true
+#max_line_length = 256
+trim_trailing_whitespace = true
+
+# Code files
+
+# Xml project files
+[*.{csproj,vbproj,vcxproj,vcxproj.filters,proj,projitems,shproj}]
+indent_size = 2
+
+# Xml config files
+[*.{props,targets,ruleset,config,nuspec,resx,vsixmanifest,vsct,xml,stylecop}]
+indent_size = 2
+
+# JSON files
+[*.json]
+indent_size = 2
+
+# Shell scripts
+[*.sh]
+end_of_line = lf
+
+[*.{cmd,bat}]
+end_of_line = crlf
+
+[*.txt]
+charset = utf-8-bom
+
+
+## Language conventions
+
+# Code style settings:
+# Multi-language:
+[*.{c,cpp,cs,csx,cxx,h,hpp,hxx,js,jsx,vb,vbx}]
+
+indent_size = 4
+insert_final_newline = true
+#Wrapping = 132
+
+# Braces
+braces_for_ifelse = required : suggestion
+
+# Dotnet code style settings:
+#[*.{cs,vb}]
+# Avoid "this." and "Me." if not necessary
+dotnet_style_qualification_for_event = false : suggestion
+dotnet_style_qualification_for_field = false : suggestion
+dotnet_style_qualification_for_method = false : suggestion
+dotnet_style_qualification_for_property = false : suggestion
+
+# Use language keywords instead of framework type names for type references
+dotnet_style_predefined_type_for_locals_parameters_members = true : suggestion
+dotnet_style_predefined_type_for_member_access = true : suggestion
+
+# Expression-level preferences
+dotnet_style_coalesce_expression = true : suggestion
+dotnet_style_collection_initializer = true : suggestion
+dotnet_style_explicit_tuple_names = true : suggestion
+dotnet_style_null_propagation = true : suggestion
+dotnet_style_object_initializer = true : suggestion
+dotnet_style_prefer_is_null_check_over_reference_equality_method = true : suggestion
+dotnet_style_require_accessibility_modifiers = always : suggestion
+
+# CSharp code style settings:
+#[*.cs]
+# Prefer "var" everywhere (Implicit and explicit types)
+csharp_style_var_elsewhere = false : suggestion
+csharp_style_var_for_built_in_types = false : suggestion
+csharp_style_var_when_type_is_apparent = true : suggestion
+
+# Expression-Bodied members
+csharp_style_expression_bodied_accessors = true : suggestion
+csharp_style_expression_bodied_indexers = true : suggestion
+csharp_style_expression_bodied_operators = true : suggestion
+csharp_style_expression_bodied_properties = true : suggestion
+# Explicitly disabled due to difference in coding style between source and tests
+#csharp_style_expression_bodied_constructors = true : suggestion
+#csharp_style_expression_bodied_methods = true : suggestion
+
+# Pattern matching
+csharp_style_pattern_matching_over_as_with_null_check = true : suggestion
+csharp_style_pattern_matching_over_is_with_cast_check = true : suggestion
+
+# Inlined variable declarations
+csharp_style_inlined_variable_declaration = true : suggestion
+
+# Expression-level preferences
+#csharp_prefer_inferred_anonymous_type_member_names = true : suggestion
+#csharp_prefer_inferred_tuple_names = true : suggestion
+csharp_prefer_simple_default_expression = true : suggestion
+csharp_preferred_modifier_order = public,private,protected,internal,const,static,extern,new,virtual,abstract,sealed,override,readonly,unsafe,volatile,async : suggestion
+csharp_style_deconstructed_variable_declaration = true : suggestion
+csharp_style_pattern_local_over_anonymous_function = true : suggestion
+
+# Null-checking preference
+csharp_style_conditional_delegate_call = true : suggestion
+csharp_style_throw_expression = true : suggestion
+
+# Code block preferences
+csharp_braces_for_ifelse = required : suggestion
+csharp_prefer_braces = true : suggestion
+
+
+# Parenthesis
+
+#csharp_parentheses_non_obvious_operations = multiplicative,additive,arithmetic,shift,relational,equality,bitwise_and,bitwise_exclusive_or,bitwise_inclusive_or,bitwise,conditional_and,conditional_or,conditional,null_coalescing,lowest
+csharp_parentheses_non_obvious_operations = arithmetic,shift,relational,equality,bitwise,conditional,null_coalescing,lowest
+
+#parentheses_non_obvious_operations = multiplicative,additive,arithmetic,shift,relational,equality,bitwise_and,bitwise_exclusive_or,bitwise_inclusive_or,bitwise,conditional_and,conditional_or,conditional,null_coalescing,lowest
+parentheses_non_obvious_operations = arithmetic,shift,relational,equality,bitwise,conditional,null_coalescing,lowest
+
+dotnet_style_parentheses_in_other_operators = always_for_clarity : suggestion
+
+
+## Formatting conventions
+# Code formatting settings:
+# Multi-language:
+#[*.{c,cpp,cs,csx,cxx,h,hpp,hxx,js,jsx,vb,vbx}]
+
+# Alignment:
+#align_first_arg_by_paren = true
+align_multiline_argument = true
+align_multiline_array_and_object_initializer = false
+align_multiline_binary_expressions_chain = true
+align_multiline_calls_chain = true
+align_multiline_expression = true
+align_multiline_extends_list = true
+align_multiline_for_stmt = true
+align_multiline_parameter = true
+align_multline_type_parameter_constrains = true
+align_multline_type_parameter_list = true
+align_multiple_declaration = true
+alignment_tab_fill_style = use_spaces
+indent_anonymous_method_block = true
+int_align = true
+int_align_assignments = true
+int_align_binary_expressions = false
+int_align_comments = true
+int_align_fields = true
+int_align_invocations = true
+int_align_methods = true
+int_align_nested_ternary = false
+int_align_parameters = true
+int_align_properties = true
+int_align_switch_sections = true
+int_align_variables = true
+outdent_binary_ops = true
+outdent_dots = true
+
+# - which of these spellings are correct?  ("multline" is from web page)
+align_multiline_type_parameter_constrains = true
+align_multiline_type_parameter_list = true
+
+# Indent:
+continuous_indent_multiplier = 1
+indent_method_decl_pars = outside
+indent_invocation_pars = outside
+indent_nested_for_stmt = true
+indent_nested_foreach_stmt = true
+indent_nested_while_stmt = true
+indent_pars = outside_and_inside
+indent_preprocessor_if = no_indent
+indent_preprocessor_other = no_indent
+indent_preprocessor_region = usual_indent
+indent_statement_pars = outside
+indent_switch_labels = false
+indent_type_constraints = true
+stick_comment = true
+use_continuous_indent_inside_parens = false
+
+# Line Breaks:
+force_chop_compound_do_expression = false
+force_chop_compound_if_expression = false
+force_chop_compound_while_expression = false
+keep_existing_arrangement = false
+keep_existing_declaration_parens_arrangement = false
+keep_existing_expr_member_arrangement = false
+keep_user_linebreaks = false
+max_array_initializer_elements_on_line = 1
+max_attribute_length_for_same_line = 120
+max_enum_members_on_line = 1
+max_formal_parameters_on_line = 5
+max_initializer_elements_on_line = 1
+max_line_length = 144
+nested_ternary_style = expanded
+new_line_before_catch = true
+new_line_before_else = true
+new_line_before_finally = true
+new_line_before_while = true
+place_accessor_attribute_on_same_line = if_owner_is_single_line
+place_accessorholder_attribute_on_same_line = if_owner_is_single_line
+place_attribute_on_same_line = if_owner_is_single_line
+place_constructor_initializer_on_same_line = false
+place_expr_accessor_on_single_line = if_owner_is_single_line
+place_expr_method_on_single_line = if_owner_is_single_line
+place_expr_property_on_single_line = if_owner_is_single_line
+place_field_attribute_on_same_line = if_owner_is_single_line
+place_method_attribute_on_same_line = if_owner_is_single_line
+place_simple_case_statement_on_same_line = if_owner_is_single_line
+place_simple_embedded_block_on_same_line = false
+place_simple_embedded_statement_on_same_line = false
+place_simple_enum_on_single_line = true
+place_simple_initializer_on_single_line = true
+place_type_attribute_on_same_line = if_owner_is_single_line
+place_type_constraints_on_same_line = false
+special_else_if_treatment = true
+wrap_after_dot_in_method_calls = false
+wrap_arguments_style = wrap_if_long
+wrap_array_initializer_style = chop_if_long
+wrap_before_binary_opsign = true
+wrap_before_comma = false
+wrap_before_declaration_lpar = false
+wrap_before_invocation_lpar = false
+wrap_before_extends_colon = false
+wrap_before_ternary_opsigns = true
+wrap_before_type_parameter_langle = false
+wrap_chained_binary_expressions = chop_if_long
+wrap_chained_method_calls = chop_if_long
+wrap_enum_declaration = chop_if_long
+wrap_for_stmt_header_style = chop_if_long
+wrap_multiple_declaration_style = chop_always
+wrap_multiple_type_parameter_constraints_style = chop_always
+wrap_object_and_collection_initializer_style = chop_if_long
+wrap_parameters_style = chop_if_long
+wrap_ternary_expr_style = chop_if_long
+
+# Spacing options
+space_after_asterik_op = false
+space_after_cast = false
+space_after_keywords_in_control_flow_statements = true
+space_after_operator_keyword = true
+space_after_unary_operator = false
+space_around_alias_eq = true
+space_around_binary_operators = before_and_after
+space_around_lambda_arrow = true
+space_before_nullable_mark = false
+space_before_pointer_asterik_declaration = true
+space_before_trailing_comment = true
+space_between_method_call_parameter_list_parentheses = false
+space_between_method_declaration_parameter_list_parentheses = false
+space_between_parentheses = false
+
+# Spelling corrected
+space_after_asterisk_op = false
+space_before_pointer_asterisk_declaration = true
+
+instance_members_qualify_members = none : suggestion
+
+
+# Dotnet formatting settings:
+#[*.{cs,vb}]
+# Organize usings
+dotnet_sort_system_directives_first = true
+
+# CSharp formatting settings:
+#[*.cs]
+# Newline options
+csharp_keep_existing_expr_member_arrangement = false
+csharp_keep_user_linebreaks = false
+csharp_max_line_length = 144
+csharp_new_line_before_catch = true
+csharp_new_line_before_else = true
+csharp_new_line_before_finally = true
+csharp_new_line_before_members_in_anonymous_types = true
+#csharp_new_line_before_members_in_object_initializers = true
+#csharp_new_line_before_open_brace = all
+
+csharp_keep_existing_arrangement = false
+csharp_keep_existing_declaration_parens_arrangement = false
+csharp_keep_existing_expr_member_arrangement = false
+csharp_max_formal_parameters_on_line = 5
+csharp_new_line_between_query_expression_clauses = true
+csharp_place_abstract_accessorholder_on_single_line = true
+csharp_place_accessor_attribute_on_same_line = if_owner_is_single_line
+csharp_place_accessorholder_attribute_on_same_line = if_owner_is_single_line
+csharp_place_attribute_on_same_line = if_owner_is_single_line
+csharp_place_expr_accessor_on_single_line = if_owner_is_single_line
+csharp_place_expr_method_on_single_line = if_owner_is_single_line
+csharp_place_expr_property_on_single_line = if_owner_is_single_line
+csharp_place_field_attribute_on_same_line = if_owner_is_single_line
+csharp_place_linq_into_on_new_line = false
+csharp_place_method_attribute_on_same_line = if_owner_is_single_line
+csharp_place_simple_accessor_on_single_line = true
+csharp_place_simple_accessorholder_on_single_line = false
+csharp_place_simple_anonymousmethod_on_single_line = true
+csharp_place_simple_method_on_single_line = false
+csharp_place_type_attribute_on_same_line = if_owner_is_single_line
+csharp_special_else_if_treatment = true
+csharp_wrap_before_arrow_with_expressions = true
+csharp_wrap_before_comma = false
+csharp_wrap_before_declaration_lpar = false
+csharp_wrap_linq_expressions = chop_always
+csharp_wrap_parameters_style = chop_if_long
+csharp_wrap_verbatim_interpolated_strings = chop_if_long
+
+# Alignment optiosn
+csharp_align_linq_query = true
+csharp_align_tuple_components = true
+
+# Identation options
+csharp_indent_case_contents = true
+csharp_indent_labels = no_change
+csharp_indent_switch_labels = false
+
+csharp_indent_nested_fixed_stmt = true
+csharp_indent_nested_lock_stmt = true
+csharp_indent_nested_usings_stmt = true
+
+# Spacing options
+csharp_space_after_asterik_op = false
+csharp_space_after_cast = false
+csharp_space_after_keywords_in_control_flow_statements = true
+csharp_space_after_operator_keyword = true
+csharp_space_after_unary_operator = false
+csharp_space_around_alias_eq = true
+csharp_space_around_binary_operators = before_and_after
+csharp_space_around_lambda_arrow = true
+csharp_space_before_nullable_mark = false
+csharp_space_before_pointer_asterik_declaration = true
+csharp_space_between_method_call_parameter_list_parentheses = false
+csharp_space_between_method_declaration_parameter_list_parentheses = false
+csharp_space_between_parentheses = false
+csharp_space_before_trailing_comment = true
+
+# Spelling corrected
+csharp_space_after_asterisk_op = false
+csharp_space_before_pointer_asterisk_declaration = true
+
+# Wrapping options
+csharp_preserve_single_line_blocks = false
+csharp_preserve_single_line_statements = false
+
+csharp_instance_members_qualify_members = none : suggestion
+
+
+## Naming conventions
+#[*.{cs,vb}]
+
+## Naming styles
+
+dotnet_naming_style.pascal_case_style.capitalization = pascal_case
+
+dotnet_naming_style.camel_case_style.capitalization = camel_case
+
+# PascalCase with I prefix
+dotnet_naming_style.interface_style.capitalization = pascal_case
+dotnet_naming_style.interface_style.required_prefix = I
+
+# PascalCase with T prefix
+dotnet_naming_style.type_parameter_style.capitalization = pascal_case
+dotnet_naming_style.type_parameter_style.required_prefix = T
+
+# camelCase with _ prefix
+dotnet_naming_style._camelCase.capitalization = camel_case
+dotnet_naming_style._camelCase.required_prefix = _
+
+# camelCase with s_ prefix
+dotnet_naming_style.s_camel_case_style.capitalization = camel_case
+dotnet_naming_style.s_camel_case_style.required_prefix = s_
+
+# All CAPS
+dotnet_naming_style.all_caps_style.capitalization = all_upper
+dotnet_naming_style.all_caps_style.word_separator = _
+
+# async methods end in Async
+dotnet_naming_style.end_in_async_style.capitalization  = pascal_case
+dotnet_naming_style.end_in_async_style.required_suffix = Async
+
+
+## Rules
+
+# Interfaces
+dotnet_naming_rule.interface_naming.symbols = interface_symbol
+dotnet_naming_rule.interface_naming.style = interface_style
+dotnet_naming_rule.interface_naming.severity = suggestion
+
+dotnet_naming_symbols.interface_symbol.applicable_kinds = interface
+dotnet_naming_symbols.interface_symbol.applicable_accessibilities = *
+
+
+# Classes, Structs, Enums, Properties, Methods, Events, Namespaces, Delegates
+dotnet_naming_rule.class_naming.symbols = class_symbol
+dotnet_naming_rule.class_naming.style = pascal_case_style
+dotnet_naming_rule.class_naming.severity = suggestion
+
+dotnet_naming_symbols.class_symbol.applicable_kinds = class, struct, enum, property, method, event, namespace, delegate
+dotnet_naming_symbols.class_symbol.applicable_accessibilities = *
+
+
+# Type Parameters
+dotnet_naming_rule.type_parameter_naming.symbols = type_parameter_symbol
+dotnet_naming_rule.type_parameter_naming.style = type_parameter_style
+dotnet_naming_rule.type_parameter_naming.severity = suggestion
+
+dotnet_naming_symbols.type_parameter_symbol.applicable_kinds = type_parameter
+dotnet_naming_symbols.type_parameter_symbol.applicable_accessibilities = *
+
+
+# Const fields
+dotnet_naming_rule.const_field_naming.symbols = const_field_symbol
+dotnet_naming_rule.const_field_naming.style = pascal_case_style
+dotnet_naming_rule.const_field_naming.severity = suggestion
+
+dotnet_naming_symbols.const_field_symbol.applicable_kinds = field
+dotnet_naming_symbols.const_field_symbol.applicable_accessibilities = *
+dotnet_naming_symbols.const_field_symbol.required_modifiers = const
+
+
+# Const variables
+dotnet_naming_rule.const_variable_naming.symbols = const_variable_symbol
+dotnet_naming_rule.const_variable_naming.style = all_caps_style
+dotnet_naming_rule.const_variable_naming.severity = suggestion
+
+dotnet_naming_symbols.const_variable_symbol.applicable_kinds = local, variable
+dotnet_naming_symbols.const_variable_symbol.required_modifiers = const
+
+
+# Public fields
+dotnet_naming_rule.public_field_naming.symbols = public_field_symbol
+dotnet_naming_rule.public_field_naming.style = pascal_case_style
+dotnet_naming_rule.public_field_naming.severity = suggestion
+
+dotnet_naming_symbols.public_field_symbol.applicable_kinds = field
+dotnet_naming_symbols.public_field_symbol.applicable_accessibilities = public, internal, protected
+
+
+# Static Private fields
+dotnet_naming_rule.static_private_field_naming.symbols = static_private_field_symbol
+dotnet_naming_rule.static_private_field_naming.style = s_camel_case_style
+dotnet_naming_rule.static_private_field_naming.severity = suggestion
+
+dotnet_naming_symbols.static_private_field_symbol.applicable_kinds = field
+dotnet_naming_symbols.static_private_field_symbol.applicable_accessibilities = private
+dotnet_naming_symbols.static_private_field_symbol.required_modifiers = static
+
+
+# Other fields
+dotnet_naming_rule.other_field_naming.symbols = other_field_symbol
+dotnet_naming_rule.other_field_naming.style = _camelCase
+dotnet_naming_rule.other_field_naming.severity = suggestion
+
+dotnet_naming_symbols.other_field_symbol.applicable_kinds = field
+dotnet_naming_symbols.other_field_symbol.applicable_accessibilities = *
+
+
+# async methods end in Async
+dotnet_naming_rule.async_methods_must_end_with_async.severity = warning
+dotnet_naming_rule.async_methods_must_end_with_async.symbols  = method_symbols
+dotnet_naming_rule.async_methods_must_end_with_async.style    = end_in_async_style
+
+dotnet_naming_symbols.method_symbols.applicable_kinds   = method
+dotnet_naming_symbols.method_symbols.required_modifiers = async
+
+
+# Everything Else
+dotnet_naming_rule.everything_else_naming.symbols = everything_else
+dotnet_naming_rule.everything_else_naming.style = camel_case_style
+dotnet_naming_rule.everything_else_naming.severity = suggestion
+
+dotnet_naming_symbols.everything_else.applicable_kinds = *
+dotnet_naming_symbols.everything_else.applicable_accessibilities = *
+
+
+html_sort_attributes = true
+sort_attributes = true
+
+# ReSharper (R#):
+resharper_html_sort_attributes = true
+resharper_multiple_spaces_highlighting = false
+resharper_sort_attributes = true

@@ -1,0 +1,8 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs/LakeManorContracts/v15
+/Smartmatic/Assessment/x64/Debug
+/Smartmatic/Assessment/_ReSharper.Caches/ReSharperPlatformVs15182_a1e751ad.AssessmentMain.00
+/.vs
