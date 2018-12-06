@@ -16,11 +16,24 @@
 #ifdef _MSC_VER
 #  include <windows.h>
 #  include <synchapi.h>
+#  include <corecrt_io.h>
 #else
 #  include <unistd.h>
 #endif
 
 #include "Compatibility.h"
+
+#include <io.h>
+
+
+bool FileExists(const std::string &filename)
+{
+#ifdef _MSC_VER
+    return _access(filename.c_str(), 0) != -1;
+#else
+    return access(filename.c_str(), 0) != -1;
+#endif
+}
 
 
 void MillisecondSleep(int milliseconds)

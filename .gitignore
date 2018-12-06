@@ -6,3 +6,17 @@
 /Smartmatic/Assessment/x64/Debug
 /Smartmatic/Assessment/_ReSharper.Caches/ReSharperPlatformVs15182_a1e751ad.AssessmentMain.00
 /.vs
+/Smartmatic/Assessment/.vs/AssessmentMain
+/Smartmatic/Assessment/x64/Release
+/Smartmatic/Assessment/build/CMakeFiles
+/Smartmatic/Assessment/build/CMakeCache.txt
+/Smartmatic/Assessment/build/cmake_install.cmake
+/Smartmatic/Assessment/OutA.txt
+/Smartmatic/Assessment/OutA-noDups.txt
+/Smartmatic/Assessment/Out2a.txt
+/Smartmatic/Assessment/Out2a-noDups.txt
+/Smartmatic/Assessment/Out2.txt
+/Smartmatic/Assessment/Out - HeapSort 2a.txt
+/Smartmatic/Assessment/Out - HeapSort 2a-noDups.txt
+/Smartmatic/Assessment/AssessmentMain.VC.db
+/Smartmatic/Assessment/build/AssessmentMain.exe

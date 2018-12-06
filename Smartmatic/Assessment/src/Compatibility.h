@@ -16,6 +16,10 @@
 #ifndef _COMPATIBILITY_H
 #define _COMPATIBILITY_H
 
+#include <string>
+
+bool FileExists(const std::string &filename);
+
 void MillisecondSleep(int milliseconds);
 
 

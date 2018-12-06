@@ -85,7 +85,7 @@ int main(const int argc, char *argv[])
 		exit (errorCode);
 	}
 
-    std::cout << "Successfully completed.";
+    std::cout << "Successfully completed." << std::endl;
 	exit(0);
 }
 
@@ -108,7 +108,7 @@ static int CheckApplicationArguments(char *argv[], Algorithms::SortAlgorithm &so
     const   char *pAlgorithmToSort  = argv[3];
 
 	// Is the input file available/readble?
-	if (_access(pPathToInputFile, 0) == -1)
+	if (!FileExists(pPathToInputFile))
 	{
 		std::cerr << "Error:" << std::endl
                   << "Input file '" << pPathToInputFile << "' is not found or accessible." << std::endl;
