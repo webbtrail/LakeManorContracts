@@ -106,7 +106,7 @@ private:
 
     /// <summary>Waits for queue to empty.</summary>
     /// <param name="linesRead">The lines read.</param>
-    void WaitForQueueToEmpty(int linesRead) const;
+    void WaitForQueueToEmpty(int linesRead);
 };
 
 #endif // _PROCESS_INPUT_FILE_H

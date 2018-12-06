@@ -40,15 +40,35 @@ public:
     { }
 
 
+    // Prevent optimization from removing the queue management mutex.
+#ifndef _MSC_VER
+#pragma GCC push_options
+#pragma GCC optimize ("O0")
+#pragma OPTIMIZE OFF
+#endif
+
+
     /// <summary>Determines whether this queue is empty.</summary>
     /// <returns> true or false as appropriate.</returns>
-    bool IsEmpty() const { return _queue.empty(); }
+    bool IsEmpty()
+#ifndef _MSC_VER
+        __attribute__((optimize("-O0")))
+#endif
+    {
+        // Lock will be released as soon as it goes out of scope.
+        std::unique_lock<std::mutex> lock(_mutex);
+
+        return _queue.empty();
+    }
 
 
     /// <summary>Tries to pop an item from the producer queue.</summary>
     /// <param name="item">The item.</param>
     /// <returns>true / false - depending upon success.</returns>
     bool TryPop(TItem & item)
+#ifndef _MSC_VER
+        __attribute__((optimize("-O0")))
+#endif
     {
         {            
             // Lock will be released as soon as it goes out of scope.
@@ -69,14 +89,21 @@ public:
     /// <summary>Pushes the specified item into the producer queue.</summary>
     /// <param name="item">The item.</param>
     void Push(TItem && item)
+#ifndef _MSC_VER
+        __attribute__((optimize("-O0")))
+#endif
     {
-        {            
-            // Lock will be released as soon as it goes out of scope.
-            std::unique_lock<std::mutex> lock(_mutex);
+        // Lock will be released as soon as it goes out of scope.
+        std::unique_lock<std::mutex> lock(_mutex);
 
-            _queue.push(std::move(item));
-        }
+        _queue.push(std::move(item));
     }
+
+
+#ifndef _MSC_VER
+#pragma OPTIMIZE ON
+#pragma GCC pop_options
+#endif
 };
 
 

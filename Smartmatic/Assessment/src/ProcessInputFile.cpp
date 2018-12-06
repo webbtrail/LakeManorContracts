@@ -147,6 +147,12 @@ void ProcessInputFile::Consumer(void *state, const item_t &item)
 }
 
 
+// Prevent optimization from removing the queue management mutex.
+#ifndef _MSC_VER
+#pragma GCC push_options
+#pragma GCC optimize ("O0")
+#endif
+
 /// <summary>Send trace messages to Standard Out.</summary>
 void ProcessInputFile::ConsoleTrace(const std::string &msg)
 {
@@ -159,6 +165,10 @@ void ProcessInputFile::ConsoleTrace(const std::string &msg)
     }
 #endif
 }
+
+#ifndef _MSC_VER
+#pragma GCC pop_options
+#endif
 
 
 /// <summary>Parses and Sorts the item string.</summary>
@@ -249,7 +259,7 @@ std::string ProcessInputFile::ToItemStringSorted(const std::string &itemStringFi
 
 /// <summary>Waits for queue to empty.</summary>
 /// <param name="linesRead">The lines read.</param>
-void ProcessInputFile::WaitForQueueToEmpty(const int linesRead) const
+void ProcessInputFile::WaitForQueueToEmpty(const int linesRead)
 {
     // Assume a maximum of 8 spaces per line that are waited for.
     // Above this number, that line is pretty garbled anyway.
