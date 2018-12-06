@@ -5,6 +5,7 @@ add_executable(AssessmentMain
 			./src/AssessmentMain.cpp
 			./src/Compatibility.cpp
 			./src/ProcessInputFile.cpp
+			./src/WorkItem.cpp
 			./src/Algorithms/SortAlgorithm.cpp
 )
 
@@ -16,14 +17,16 @@ SET(src_files
 			./src/AssessmentMain.cpp
 			./src/Compatibility.cpp
 			./src/ProcessInputFile.cpp
+			./src/WorkItem.cpp
 			./src/Algorithms/SortAlgorithm.cpp
 )
 
 SET(include_files
+			./src/Compatibility.h
 			./src/ItemConsumer.h
 			./src/ItemProducerQueue.h
 			./src/ProcessInputFile.h
-			./src/Compatibility.h
+			./src/WorkItem.h
 			./src/Algorithms/HeapSort.h
 			./src/Algorithms/ShellSort.h
 			./src/Algoirthms/SortAlgorithm.h

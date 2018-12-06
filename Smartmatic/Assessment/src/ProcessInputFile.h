@@ -23,7 +23,7 @@
 #include "Algorithms/SortAlgorithm.h"
 #include "ItemProducerQueue.h"
 #include "ItemConsumer.h"
-
+#include "WorkItem.h"
 
 /// <summary>
 ///     Process the specified input file.
@@ -37,7 +37,7 @@ public:
     static const int MAX_CONSUMER_THREADS = 4;
 
     typedef std::vector<char> item_t;
-    typedef void (*consumer_t)(void *state, const item_t &);
+    typedef void (*consumer_t)(const WorkItem &);
 
 private:
     // Inputs
@@ -49,8 +49,8 @@ private:
     std::unique_ptr<std::ifstream> _inputStream;
     std::ofstream                  _outputStream;
 
-    ItemProducerQueue<item_t>            _producerQueue;
-    std::vector<ItemConsumer<item_t> *> *_consumers;
+    ItemProducerQueue<WorkItem>            _producerQueue;
+    std::vector<ItemConsumer<WorkItem> *> *_consumers;
 
     //static std::mutex _outputStreamMutex;
 
@@ -68,7 +68,7 @@ public:
         _outputFile    = outputFile;
         _sortAlgorithm = sortAlgorithm;
 
-        _consumers = new std::vector<ItemConsumer<item_t> *>(MAX_CONSUMER_THREADS);
+        _consumers = new std::vector<ItemConsumer<WorkItem> *>(MAX_CONSUMER_THREADS);
     }
 
 
@@ -76,7 +76,10 @@ public:
     /// <remarks>Let the std::unique_ptr destructor automatically clean up for us.</remarks>
     virtual ~ProcessInputFile();
 
+    /// <summary>Processes this instance.</summary>
+    /// <returns>Error Code if less than 0.</returns>
     int Process();
+
 
     /// Block the copy constructor.
     ProcessInputFile(ProcessInputFile &) = delete;
@@ -91,11 +94,19 @@ public:
     ProcessInputFile operator =(ProcessInputFile &&) = delete;
 
 private:
-    static void Consumer(void *state, const item_t &item);
-
     /// <summary>Send trace messages to Standard Out.</summary>
     static void ConsoleTrace(const std::string &msg);
 
+    /// <summary>Consume an item in the producer queue.</summary>
+    static void Consumer(const WorkItem &workItem);
+
+    /// <summary>Get the next item string (raw) from the input stream.</summary>
+    /// <param name="edittedString">The editted string.</param>
+    /// <returns><see langword="true"/> if successful, <see langword="false"/> otherwise.</returns>
+    bool GetItemString(std::string &edittedString) const;
+
+    /// <summary>Initializes this instance.</summary>
+    /// <returns>If less than zero, any associated error code.</returns>
     int Initialize();
 
     std::string ParseAndSortItemString(const std::string &itemString) const;

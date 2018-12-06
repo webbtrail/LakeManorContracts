@@ -62,88 +62,18 @@ int ProcessInputFile::Process()
     int linesRead = 0;
     for (; linesRead < MAX_LINES; ++linesRead)
     {
-        char itemsMaxBuf[MAX_BUF_LENGTH];
-        _inputStream->getline(itemsMaxBuf, MAX_BUF_LENGTH);
-        if (_inputStream->bad())
-        {
-            // Break out of input loop on error or end-of-file.
+        std::string edittedString;
+        if (!GetItemString(edittedString)) {
             break;
         }
 
-        std::string            itemString    = std::string(itemsMaxBuf);
-        std::string::size_type indexPastData = itemString.find('\n');
-        if (indexPastData == std::string::npos) {
-            indexPastData = itemString.find('\0');
-        }
-
-        // If indexPastData is 0, then there is no data, and the length is indeed 0.
-        const size_t length = std::min<size_t>(((indexPastData != std::string::npos) ? indexPastData : MAX_CHARS), MAX_CHARS);
-        std::string edittedString = itemString.substr(0, length);
-
-        // Reference: https://stackoverflow.com/questions/8777603/what-is-the-simplest-way-to-convert-array-to-vector
-        _producerQueue.Push(item_t(edittedString.begin(), edittedString.end()));
+        const auto workItem = std::make_shared<item_t>(item_t(edittedString.begin(), edittedString.end()));
+        _producerQueue.Push(WorkItem(linesRead, this, &ProcessInputFile::Consumer, workItem));
     }
 
+    // How long to wait is a function of the number of lines read.
     WaitForQueueToEmpty(linesRead);
     return 0;
-}
-
-
-/// <summary>Initializes this instance.</summary>
-/// <returns></returns>
-int ProcessInputFile::Initialize()
-{
-    _inputStream = std::make_unique<std::ifstream>();
-    _inputStream->open(_inputFile);
-    if (_inputStream->bad())
-    {
-        std::cerr << "Error opening input file '" << _inputFile << "'." << std::endl;
-        return -11;
-    }
-
-    //_outputStream = std::ofstream(_outputFile);
-    _outputStream.open(_outputFile);
-    if (_outputStream.bad())
-    {
-        std::cerr << "Error opening output file '" << _outputFile << "'." << std::endl;
-        return -12;
-    }
-
-    // _outputStream is not making it through the lambda capture
-    // Sometimes the less layered logic is easier to debug.
-    // We are completely avoiding captures and closures within this class by using this older state tracking methodology.
-
-    for (auto i = 0; i < MAX_CONSUMER_THREADS; ++i) {
-        _consumers->at(i) = new ItemConsumer<item_t>(_producerQueue, &ProcessInputFile::Consumer, this);        
-    }
-
-    return 0;
-}
-
-
-/// <summary>Consumes the item.</summary>
-void ProcessInputFile::Consumer(void *state, const item_t &item)
-{
-    // Sometimes the less layered logic is easier to debug.
-    // We are completely avoiding captures and closures within this class by using this older state tracking methodology.
-    auto pThis = static_cast<ProcessInputFile *>(state);
-
-    const auto length = item.size();
-    if (length == 0) {
-        return;
-    }
-
-    const std::string itemStringOriginal(item.begin(), item.end());
-
-    const auto itemStringSorted = pThis->ParseAndSortItemString(itemStringOriginal);
-
-    const auto itemStringFormatted = ToItemStringFormatted(itemStringSorted);
-
-    // Where are we routinely getting an uninitialized member error hear?
-    // Everything seems to work fine when the output is not attempted to be outputted.
-    // Each stream operator is supposed to be thread safe.
-    // The _outputStream member value is not making it here.
-    pThis->_outputStream << itemStringFormatted;
 }
 
 
@@ -169,6 +99,91 @@ void ProcessInputFile::ConsoleTrace(const std::string &msg)
 #ifndef _MSC_VER
 #pragma GCC pop_options
 #endif
+
+
+/// <summary>Consume an item in the producer queue.</summary>
+void ProcessInputFile::Consumer(const WorkItem &workItem)
+{
+    // Sometimes the less layered logic is easier to debug.
+    // We are completely avoiding captures and closures within this class by using this older state tracking methodology.
+    auto pThis = workItem.Producer();
+
+    auto item = workItem.Item();
+    const auto length = item.size();
+    if (length == 0) {
+        return;
+    }
+
+    const std::string itemStringOriginal(item.begin(), item.end());
+
+    const auto itemStringSorted = pThis->ParseAndSortItemString(itemStringOriginal);
+
+    const auto itemStringFormatted = ToItemStringFormatted(itemStringSorted);
+
+    // Where are we routinely getting an uninitialized member error hear?
+    // Everything seems to work fine when the output is not attempted to be outputted.
+    // Each stream operator is supposed to be thread safe.
+    // The _outputStream member value is not making it here.
+    pThis->_outputStream << itemStringFormatted;
+}
+
+
+/// <summary>Get the next item string (raw) from the input stream.</summary>
+/// <param name="edittedString">The editted string.</param>
+/// <returns><see langword="true"/> if successful, <see langword="false"/> otherwise.</returns>
+bool ProcessInputFile::GetItemString(std::string &edittedString) const
+{
+    char itemsMaxBuf[MAX_BUF_LENGTH];
+    _inputStream->getline(itemsMaxBuf, MAX_BUF_LENGTH);
+    if (_inputStream->bad())
+    {
+        // Break out of input loop on error or end-of-file.
+        return false;
+    }
+
+    std::string            itemString    = std::string(itemsMaxBuf);
+    std::string::size_type indexPastData = itemString.find('\n');
+    if (indexPastData == std::string::npos) {
+        indexPastData = itemString.find('\0');
+    }
+
+    // If indexPastData is 0, then there is no data, and the length is indeed 0.
+    const size_t length = std::min<size_t>(((indexPastData != std::string::npos) ? indexPastData : MAX_CHARS), MAX_CHARS);
+    edittedString = itemString.substr(0, length);
+    return true;
+}
+
+
+/// <summary>Initializes this instance.</summary>
+/// <returns>If less than zero, any associated error code.</returns>
+int ProcessInputFile::Initialize()
+{
+    _inputStream = std::make_unique<std::ifstream>();
+    _inputStream->open(_inputFile);
+    if (_inputStream->bad())
+    {
+        std::cerr << "Error opening input file '" << _inputFile << "'." << std::endl;
+        return -11;
+    }
+
+    //_outputStream = std::ofstream(_outputFile);
+    _outputStream.open(_outputFile);
+    if (_outputStream.bad())
+    {
+        std::cerr << "Error opening output file '" << _outputFile << "'." << std::endl;
+        return -12;
+    }
+
+    // _outputStream is not making it through the lambda capture
+    // Sometimes the less layered logic is easier to debug.
+    // We are completely avoiding captures and closures within this class by using this older state tracking methodology.
+
+    for (auto i = 0; i < MAX_CONSUMER_THREADS; ++i) {
+        _consumers->at(i) = new ItemConsumer<WorkItem>(_producerQueue, &ProcessInputFile::Consumer);        
+    }
+
+    return 0;
+}
 
 
 /// <summary>Parses and Sorts the item string.</summary>

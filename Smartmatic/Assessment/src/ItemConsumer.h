@@ -22,6 +22,7 @@
 
 #include "Compatibility.h"
 #include "ItemProducerQueue.h"
+#include "WorkItem.h"
 
 
 /// <summary> The Consumer portion of the requisite asynchronous Producer / Consumer design pattern. </summary>
@@ -32,12 +33,11 @@ template<typename TItem> class ItemConsumer
 {
 private:
 
+    typedef void (*consumer_t)(const WorkItem &);
     typedef TItem item_t;
-    typedef void (*consumer_t)(void *, const item_t &);
 
     std::atomic<bool>          _isRunning = ATOMIC_VAR_INIT(true);
     consumer_t                 _consumer;
-    void                      *_state;
     ItemProducerQueue<item_t> &_queue;
 
     std::thread _thread;  // Has to be initialized last.
@@ -48,10 +48,8 @@ public:
     /// <summary>Initializes a new instance of the <see cref="ItemConsumer"/> class.</summary>
     /// <param name="queue">The queue.</param>
     /// <param name="consumer">The consumer.</param>
-    /// <param name="state">The state.</param>
-    ItemConsumer(ItemProducerQueue<item_t> &queue, consumer_t consumer, void *state)
+    ItemConsumer(ItemProducerQueue<item_t> &queue, consumer_t consumer)
         : _consumer(consumer),
-          _state(state),
           _queue(queue),
           _thread([&]()
           {
@@ -81,7 +79,7 @@ public:
                 return;
             }
 
-            _consumer(_state, item);
+            _consumer(item);
         }
     }
 

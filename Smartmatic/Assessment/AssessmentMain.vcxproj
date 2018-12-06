@@ -23,6 +23,7 @@
     <ClCompile Include="src\AssessmentMain.cpp" />
     <ClCompile Include="src\Compatibility.cpp" />
     <ClCompile Include="src\ProcessInputFile.cpp" />
+    <ClCompile Include="src\WorkItem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Algorithms\HeapSort.h" />
@@ -32,6 +33,7 @@
     <ClInclude Include="src\ItemConsumer.h" />
     <ClInclude Include="src\ProcessInputFile.h" />
     <ClInclude Include="src\ItemProducerQueue.h" />
+    <ClInclude Include="src\WorkItem.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="CMakeLists.txt" />
