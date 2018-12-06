@@ -50,15 +50,18 @@ public:
     /// <returns>true / false - depending upon success.</returns>
     bool TryPop(TItem & item)
     {
-        // Lock will be released as soon as it goes out of scope.
-        std::unique_lock<std::mutex> lock(_mutex);
+        {            
+            // Lock will be released as soon as it goes out of scope.
+            std::unique_lock<std::mutex> lock(_mutex);
 
-        if (_queue.empty()) {
-            return false;
+            if (_queue.empty()) {
+                return false;
+            }
+
+            item = _queue.front();
+            _queue.pop();
         }
 
-        item = _queue.front();
-        _queue.pop();
         return true;
     }
 
@@ -67,10 +70,12 @@ public:
     /// <param name="item">The item.</param>
     void Push(TItem && item)
     {
-        // Lock will be released as soon as it goes out of scope.
-        std::unique_lock<std::mutex> lock(_mutex);
+        {            
+            // Lock will be released as soon as it goes out of scope.
+            std::unique_lock<std::mutex> lock(_mutex);
 
-        _queue.push(std::move(item));
+            _queue.push(std::move(item));
+        }
     }
 };
 

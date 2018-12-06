@@ -22,7 +22,7 @@
 #include "Compatibility.h"
 #include "Algorithms/HeapSort.h"
 #include "Algorithms/ShellSort.h"
-//std::mutex ProcessInputFile::_outputStreamMutex;
+
 
 #ifdef _DEBUG
 std::mutex ProcessInputFile::_consoleMutex;
