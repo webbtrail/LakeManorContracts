@@ -18,7 +18,7 @@
 //#include "ProcessInputFile.h"
 
 
-int WorkItem::_serialNumberGenerator = 0;
+std::atomic_int WorkItem::_serialNumberGenerator;
 
 WorkItem * WorkItem::_empty = nullptr;
 

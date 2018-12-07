@@ -16,6 +16,7 @@
 #ifndef _WORK_ITEM_H
 #define _WORK_ITEM_H
 
+#include <atomic>
 #include <memory>
 #include <utility>
 #include <vector>
@@ -36,7 +37,7 @@ public:
 
 private:
 
-    static int _serialNumberGenerator;
+    static std::atomic_int _serialNumberGenerator;
 
     const int               _serialNumber;
     int                     _inputID;
