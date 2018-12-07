@@ -13,6 +13,10 @@
 // </summary>
 // =============================================================================================================================================
 
+#ifndef _DEBUG
+#  define _DEBUG
+#endif
+
 #include "ProcessInputFile.h"
 
 #include <iostream>
@@ -67,7 +71,7 @@ int ProcessInputFile::Process()
             break;
         }
 
-        const auto workItem = std::make_shared<item_t>(item_t(edittedString.begin(), edittedString.end()));
+        const auto workItem = new item_t(edittedString.begin(), edittedString.end());
         _producerQueue.Push(WorkItem(linesRead, this, &ProcessInputFile::Consumer, workItem));
     }
 
@@ -91,7 +95,7 @@ void ProcessInputFile::ConsoleTrace(const std::string &msg)
         // Lock will be released as soon as it goes out of scope.
         std::unique_lock<std::mutex> consoleLock(_consoleMutex);
 
-        std::cout << "ProcessInputFile::ConsoleTrace([" << msg.size() << "]'" << msg << "')." << std::endl;
+        std::cout << "Trace([" << msg.size() << "]'" << msg << "')." << std::endl;
     }
 #endif
 }
@@ -117,8 +121,15 @@ void ProcessInputFile::Consumer(const WorkItem &workItem)
     const std::string itemStringOriginal(item.begin(), item.end());
 
     const auto itemStringSorted = pThis->ParseAndSortItemString(itemStringOriginal);
+    
+    std::string prefix;
+#ifdef _DEBUG
+    std::ostringstream oString;
+    oString << "[SN" << workItem.SN() << ",Ln" << workItem.InputID() << "]: ";
+    prefix = oString.str();
+#endif
 
-    const auto itemStringFormatted = ToItemStringFormatted(itemStringSorted);
+    const auto itemStringFormatted = prefix + pThis->ToItemFormattedString(itemStringSorted);
 
     // Where are we routinely getting an uninitialized member error hear?
     // Everything seems to work fine when the output is not attempted to be outputted.
@@ -209,15 +220,15 @@ std::string ProcessInputFile::ParseAndSortItemString(const std::string &itemStri
     const std::string itemFilteredString = stringStream.str();
 
     // Now we need to sort this item vector.
-    const std::string itemSortedString = ToItemStringSorted(itemFilteredString);
+    const std::string itemSortedString = ToItemSortedString(itemFilteredString);
     return itemSortedString;
 }
 
 
-/// <summary>To the item string formatted.</summary>
+/// <summary>To the item formatted string.</summary>
 /// <param name="itemStringSorted">The item string sorted.</param>
 /// <returns></returns>
-std::string ProcessInputFile::ToItemStringFormatted(const std::string &itemStringSorted)
+std::string ProcessInputFile::ToItemFormattedString(const std::string &itemStringSorted) const
 {
     bool first = true;
     std::ostringstream itemStringStreamFormatted;
@@ -241,7 +252,7 @@ std::string ProcessInputFile::ToItemStringFormatted(const std::string &itemStrin
 /// <summary>To the item string sorted.</summary>
 /// <param name="itemStringFiltered">The item string filtered.</param>
 /// <returns></returns>
-std::string ProcessInputFile::ToItemStringSorted(const std::string &itemStringFiltered) const
+std::string ProcessInputFile::ToItemSortedString(const std::string &itemStringFiltered) const
 {
 #ifdef _DEBUG
     ConsoleTrace("itemStringFiltered=" + itemStringFiltered);

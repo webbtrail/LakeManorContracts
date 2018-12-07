@@ -231,6 +231,33 @@ src/ProcessInputFile.cpp.s:
 	$(MAKE) -f CMakeFiles/AssessmentMain.dir/build.make CMakeFiles/AssessmentMain.dir/src/ProcessInputFile.cpp.s
 .PHONY : src/ProcessInputFile.cpp.s
 
+src/WorkItem.o: src/WorkItem.cpp.o
+
+.PHONY : src/WorkItem.o
+
+# target to build an object file
+src/WorkItem.cpp.o:
+	$(MAKE) -f CMakeFiles/AssessmentMain.dir/build.make CMakeFiles/AssessmentMain.dir/src/WorkItem.cpp.o
+.PHONY : src/WorkItem.cpp.o
+
+src/WorkItem.i: src/WorkItem.cpp.i
+
+.PHONY : src/WorkItem.i
+
+# target to preprocess a source file
+src/WorkItem.cpp.i:
+	$(MAKE) -f CMakeFiles/AssessmentMain.dir/build.make CMakeFiles/AssessmentMain.dir/src/WorkItem.cpp.i
+.PHONY : src/WorkItem.cpp.i
+
+src/WorkItem.s: src/WorkItem.cpp.s
+
+.PHONY : src/WorkItem.s
+
+# target to generate assembly for a file
+src/WorkItem.cpp.s:
+	$(MAKE) -f CMakeFiles/AssessmentMain.dir/build.make CMakeFiles/AssessmentMain.dir/src/WorkItem.cpp.s
+.PHONY : src/WorkItem.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -252,6 +279,9 @@ help:
 	@echo "... src/ProcessInputFile.o"
 	@echo "... src/ProcessInputFile.i"
 	@echo "... src/ProcessInputFile.s"
+	@echo "... src/WorkItem.o"
+	@echo "... src/WorkItem.i"
+	@echo "... src/WorkItem.s"
 .PHONY : help
 
 

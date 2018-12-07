@@ -20,3 +20,15 @@
 
 int WorkItem::_serialNumberGenerator = 0;
 
+WorkItem * WorkItem::_empty = nullptr;
+
+/// <summary>A default empty instance.</summary>
+const WorkItem &WorkItem::Empty()
+{
+    if (nullptr == _empty) {
+        _empty = new WorkItem();
+    }
+
+    return *_empty;
+}
+

@@ -25,12 +25,12 @@
 /// <remarks>
 ///     <code> https://codereview.stackexchange.com/questions/177650/a-simple-implementation-of-the-producer-consumer-pattern </code>
 /// </remarks>
-template<typename TItem> class ItemProducerQueue
+template<typename TWorkItem> class ItemProducerQueue
 {
 private:
 
-    std::mutex        _mutex;
-    std::queue<TItem> _queue;
+    std::mutex            _mutex;
+    std::queue<TWorkItem> _queue;
 
 public:
 
@@ -63,32 +63,29 @@ public:
 
 
     /// <summary>Tries to pop an item from the producer queue.</summary>
-    /// <param name="item">The item.</param>
+    /// <param name="workItem">The work item.</param>
     /// <returns>true / false - depending upon success.</returns>
-    bool TryPop(TItem & item)
+    bool TryPop(TWorkItem & workItem)
 #ifndef _MSC_VER
         __attribute__((optimize("-O0")))
 #endif
     {
-        {            
-            // Lock will be released as soon as it goes out of scope.
-            std::unique_lock<std::mutex> lock(_mutex);
+        // Lock will be released as soon as it goes out of scope.
+        std::unique_lock<std::mutex> lock(_mutex);
 
-            if (_queue.empty()) {
-                return false;
-            }
-
-            item = _queue.front();
-            _queue.pop();
+        if (_queue.empty()) {
+            return false;
         }
 
+        workItem = std::move(_queue.front());
+        _queue.pop();
         return true;
     }
 
 
     /// <summary>Pushes the specified item into the producer queue.</summary>
     /// <param name="item">The item.</param>
-    void Push(TItem && item)
+    void Push(TWorkItem && item)
 #ifndef _MSC_VER
         __attribute__((optimize("-O0")))
 #endif

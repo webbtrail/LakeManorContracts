@@ -111,9 +111,9 @@ private:
 
     std::string ParseAndSortItemString(const std::string &itemString) const;
 
-    static std::string ToItemStringFormatted(const std::string &itemStringSorted);
+    std::string ToItemFormattedString(const std::string &itemStringSorted) const;
 
-    std::string ToItemStringSorted(const std::string &itemStringFiltered) const;
+    std::string ToItemSortedString(const std::string &itemStringFiltered) const;
 
     /// <summary>Waits for queue to empty.</summary>
     /// <param name="linesRead">The lines read.</param>

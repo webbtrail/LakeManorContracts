@@ -39,9 +39,15 @@ private:
     int                     _inputID;
     ProcessInputFile       *_producer;
     consumer_t              _consumer;
-    std::shared_ptr<item_t> _itemData;
+    std::unique_ptr<item_t> _itemData;
+
+    static WorkItem *_empty;
 
 public:
+
+    /// <summary>A default empty instance.</summary>
+    static const WorkItem &Empty();
+
 
     /// <summary>Initializes a new instance of the <see cref="WorkItem"/> class.</summary>
     WorkItem()
@@ -57,55 +63,38 @@ public:
     /// <param name="producer">The producer.</param>
     /// <param name="consumer">The consumer.</param>
     /// <param name="itemData">The item.</param>
-    WorkItem(int inputID, ProcessInputFile* producer, consumer_t consumer, std::shared_ptr<item_t> itemData)
+    WorkItem(const int inputID, ProcessInputFile* producer, consumer_t consumer, item_t *itemData)
         : _serialNumber(++_serialNumberGenerator),
           _inputID(inputID),
           _producer(producer),
           _consumer(consumer),
-          _itemData(std::move(itemData))
+          _itemData(itemData)
     { }
 
 
-    /// <summary>Initializes a new instance of the <see cref="WorkItem"/> class.</summary>
+    /// <summary>Copy constructor initializes a new instance of the <see cref="WorkItem"/> class.</summary>
     /// <param name="other">The other.</param>
-    WorkItem(const WorkItem &other)
-        : _serialNumber(++_serialNumberGenerator),
-          _inputID(other._inputID),
-          _producer(other._producer),
-          _consumer(other._consumer),
-          _itemData(other._itemData)
-    { }
+    WorkItem(const WorkItem &other) = delete;
 
-    /// <summary>Initializes a new instance of the <see cref="WorkItem"/> class.</summary>
+
+    /// <summary>Move constructor initializes a new instance of the <see cref="WorkItem"/> class.</summary>
     /// <param name="other">The other.</param>
     WorkItem(WorkItem && other) noexcept
         : _serialNumber(++_serialNumberGenerator),
           _inputID(other._inputID),
-          _producer(nullptr),
+          _producer(other._producer),
           _consumer(other._consumer),
           _itemData(std::move(other._itemData))
-    {
-        _producer = other._producer;
-    }
+    { }
 
 
-    /// <summary>Operator=s the specified other.</summary>
+    /// <summary>Copy assignment operator.</summary>
     /// <param name="other">The other.</param>
     /// <returns></returns>
-    WorkItem &operator =(const WorkItem &other)
-    {
-        if (this == &other) {
-            return *this;
-        }
+    WorkItem &operator =(WorkItem &other) = delete;
+    
 
-        _inputID  = other._inputID;
-        _producer = other._producer;
-        _consumer = other._consumer;
-        _itemData = other._itemData;
-        return *this;
-    }
-
-    /// <summary>Operator=s the specified other.</summary>
+    /// <summary>Move assignment operator.</summary>
     /// <param name="other">The other.</param>
     /// <returns></returns>
     WorkItem &operator =(WorkItem && other) noexcept
@@ -125,6 +114,9 @@ public:
     ~WorkItem() = default;
 
 
+    /// <summary>Returns the serial number of this instance.</summary>
+    int SN() const { return _serialNumber; }
+
     /// <summary>Return the input identifier.</summary>
     int InputID() const { return _inputID; }
 
@@ -139,9 +131,9 @@ public:
     /// <returns>Read-only instance yields read-only item.</returns>
     const item_t &Item() const { return *_itemData; }
 
-    /// <summary>Returns the item data associated with this instance.</summary>
-    /// <returns>Writable instance yields writable item.</returns>
-    std::shared_ptr<item_t> Item() { return _itemData; }
+    ///// <summary>Returns the item data associated with this instance.</summary>
+    ///// <returns>Writable instance yields writable item.</returns>
+    //std::shared_ptr<item_t> Item() { return _itemData; }
 };
 
 #endif  // _WORK_ITEM_H
