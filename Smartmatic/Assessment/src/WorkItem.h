@@ -124,11 +124,28 @@ public:
     ~WorkItem() = default;
 
 
+    /// <summary>Clears the item data.</summary>
+    void ClearItemData()
+    {
+        _inputID  = -1;
+        _itemData = nullptr;
+    }
+
     /// <summary>Returns the serial number of this instance.</summary>
     int SN() const { return _serialNumber; }
 
     /// <summary>Return the input identifier.</summary>
     int InputID() const { return _inputID; }
+
+    /// <summary>Inputs the identifier.</summary>
+    /// <param name="newID">The new identifier.</param>
+    /// <returns>The old input ID number.</returns>
+    int InputID(const int newID)
+    {
+        const int oldID = _inputID;
+        _inputID = newID;
+        return oldID;
+    }
 
     /// <summary>The producer associated with this instance.</summary>
     ProcessInputFile *Producer() const { return _producer; }

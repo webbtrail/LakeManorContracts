@@ -13,9 +13,7 @@
 // </summary>
 // =============================================================================================================================================
 
-#ifndef _DEBUG
-#  define _DEBUG
-#endif
+#define TAG_OUTPUT
 
 #include "ProcessInputFile.h"
 
@@ -27,6 +25,8 @@
 #include "Algorithms/ShellSort.h"
 #include "Compatibility.h"
 
+
+std::mutex ProcessInputFile::_outputStreamMutex;
 
 #ifdef _DEBUG
 std::mutex ProcessInputFile::_consoleMutex;
@@ -63,8 +63,8 @@ int ProcessInputFile::Process()
 
     // Loop through the lines of the file, stopping when we run out of data or hit the configured hard limit.
     // We need to expose the number of lines read.
-    int linesRead = 0;
-    for (; linesRead < MAX_LINES; ++linesRead)
+    int linesRead = 1;
+    for (; linesRead <= MAX_LINES; ++linesRead)
     {
         std::string edittedString;
         if (!GetItemString(edittedString)) {
@@ -82,11 +82,8 @@ int ProcessInputFile::Process()
 }
 
 
-// Prevent optimization from removing the queue management mutex.
-#ifndef _MSC_VER
-#pragma GCC push_options
-#pragma GCC optimize ("O0")
-#endif
+// ReSharper disable CppParameterNeverUsed
+#pragma warning (disable : 4100)  // Unreferenced formal parameter.
 
 /// <summary>Send trace messages to Standard Out.</summary>
 void ProcessInputFile::ConsoleTrace(const std::string &msg)
@@ -101,9 +98,8 @@ void ProcessInputFile::ConsoleTrace(const std::string &msg)
 #endif
 }
 
-#ifndef _MSC_VER
-#pragma GCC pop_options
-#endif
+// ReSharper restore CppParameterNeverUsed
+#pragma warning (default : 4100)  // Unreferenced formal parameter.
 
 
 /// <summary>Consume an item in the producer queue.</summary>
@@ -124,9 +120,9 @@ void ProcessInputFile::Consumer(WorkItem && workItem)
     const auto itemStringSorted = pThis->ParseAndSortItemString(itemStringOriginal);
     
     std::string prefix;
-#ifdef _DEBUG
+#ifdef TAG_OUTPUT
     std::ostringstream oString;
-    oString << "[SN" << workItem.SN() << ",Ln" << workItem.InputID() << "]: ";
+    oString << "[SN" << workItem.SN() << ",Ln" << workItem.InputID() << ",T" << std::this_thread::get_id() << "]: ";
     prefix = oString.str();
 #endif
 
@@ -135,8 +131,12 @@ void ProcessInputFile::Consumer(WorkItem && workItem)
     // Where are we routinely getting an uninitialized member error hear?
     // Everything seems to work fine when the output is not attempted to be outputted.
     // Each stream operator is supposed to be thread safe.
-    // The _outputStream member value is not making it here.
-    pThis->_outputStream << itemStringFormatted;
+    {
+        // Lock will be released as soon as it goes out of scope.
+        std::lock_guard<std::mutex> lock(_outputStreamMutex);
+
+        (pThis->_outputStream << itemStringFormatted).flush();
+    }
 }
 
 

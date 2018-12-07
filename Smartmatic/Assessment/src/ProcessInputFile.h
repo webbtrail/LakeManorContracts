@@ -52,7 +52,7 @@ private:
     ConcurrentQueue<WorkItem>            _producerQueue;
     std::vector<ItemConsumer<WorkItem> *> *_consumers;
 
-    //static std::mutex _outputStreamMutex;
+    static std::mutex _outputStreamMutex;
 
 #ifdef _DEBUG
     static std::mutex _consoleMutex;

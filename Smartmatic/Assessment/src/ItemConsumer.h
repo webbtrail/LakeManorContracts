@@ -33,7 +33,7 @@ template<typename TWorkItem> class ItemConsumer
 {
 private:
     using consumer_t = void (*)(WorkItem&&);
-    using item_t = TWorkItem;
+    using item_t     = TWorkItem;
 
     std::atomic<bool>        _isRunning = ATOMIC_VAR_INIT(true);
     consumer_t               _consumer;
@@ -70,8 +70,8 @@ public:
             TWorkItem item;
             while (_isRunning && !_queue.TryPop(item))
             {
-                /* do nothing */
-                MillisecondSleep(10);
+                // Do nothing
+                MillisecondSleep(100);
             }
 
             if (!_isRunning) {
@@ -79,6 +79,10 @@ public:
             }
 
             _consumer(std::move(item));
+
+            // This should NOT be necessary, because the move operation in the previous line should have
+            // taken care to clear the data.  Some C++ implementations still require this explicit data void.
+            item.ClearItemData();  // NOLINT(bugprone-use-after-move)
         }
     }
 
