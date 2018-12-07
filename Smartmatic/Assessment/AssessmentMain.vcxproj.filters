@@ -66,5 +66,6 @@
   <ItemGroup>
     <Text Include="CMakeLists.txt" />
     <Text Include="In.txt" />
+    <Text Include="README.txt" />
   </ItemGroup>
 </Project>

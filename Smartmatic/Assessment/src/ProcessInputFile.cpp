@@ -13,7 +13,7 @@
 // </summary>
 // =============================================================================================================================================
 
-#define TAG_OUTPUT
+//#define TAG_OUTPUT
 
 #include "ProcessInputFile.h"
 
@@ -26,7 +26,7 @@
 #include "Compatibility.h"
 
 
-std::mutex ProcessInputFile::_outputStreamMutex;
+//std::mutex ProcessInputFile::_outputStreamMutex;
 
 #ifdef _DEBUG
 std::mutex ProcessInputFile::_consoleMutex;
@@ -91,7 +91,7 @@ void ProcessInputFile::ConsoleTrace(const std::string &msg)
 #ifdef _DEBUG
     {
         // Lock will be released as soon as it goes out of scope.
-        std::unique_lock<std::mutex> consoleLock(_consoleMutex);
+        std::lock_guard<std::mutex> consoleLock(_consoleMutex);
 
         std::cout << "Trace([" << msg.size() << "]'" << msg << "')." << std::endl;
     }
@@ -107,36 +107,44 @@ void ProcessInputFile::Consumer(WorkItem && workItem)
 {
     // Sometimes the less layered logic is easier to debug.
     // We are completely avoiding captures and closures within this class by using this older state tracking methodology.
-    auto pThis = workItem.Producer();
+    auto    producer        = workItem.Producer();
+    auto    inputLineNumber = workItem.InputID();
+    auto    item            = workItem.Item();
 
-    auto item = workItem.Item();
     const auto length = item.size();
-    if (length == 0) {
-        return;
-    }
-
-    const std::string itemStringOriginal(item.begin(), item.end());
-
-    const auto itemStringSorted = pThis->ParseAndSortItemString(itemStringOriginal);
-    
-    std::string prefix;
+    std::string itemStringFormatted;
+    if (length != 0)
+    {
+        const std::string itemStringOriginal(item.begin(), item.end());
+        const auto        itemStringSorted = producer->ParseAndSortItemString(itemStringOriginal);
+        
+        std::string prefix;
 #ifdef TAG_OUTPUT
-    std::ostringstream oString;
-    oString << "[SN" << workItem.SN() << ",Ln" << workItem.InputID() << ",T" << std::this_thread::get_id() << "]: ";
-    prefix = oString.str();
+        std::ostringstream oString;
+        oString << "[SN" << workItem.SN() << ",Ln" << workItem.InputID() << ",T" << std::this_thread::get_id() << "]: ";
+        prefix = oString.str();
 #endif
 
-    const auto itemStringFormatted = prefix + pThis->ToItemFormattedString(itemStringSorted);
+        itemStringFormatted = prefix + producer->ToItemFormattedString(itemStringSorted);
+    }
 
-    // Where are we routinely getting an uninitialized member error hear?
-    // Everything seems to work fine when the output is not attempted to be outputted.
-    // Each stream operator is supposed to be thread safe.
     {
         // Lock will be released as soon as it goes out of scope.
-        std::lock_guard<std::mutex> lock(_outputStreamMutex);
+        std::unique_lock<std::mutex> lock(producer->_outputStreamMutex);
 
-        (pThis->_outputStream << itemStringFormatted).flush();
+        // Wait for our turn to write to the output stream.
+        // Wait until the previous line has been output.
+        // Even empty/erronous lines come through the tracking logic, they just don't get to be part of the output result.
+        producer->_lineWrittenCV.wait(lock, [producer, inputLineNumber]{ return producer->_lineWritten == (inputLineNumber - 1); });
+
+        if (length != 0) {
+            (producer->_outputStream << itemStringFormatted).flush();
+        }
+
+        producer->_lineWritten = inputLineNumber;
     }
+
+    producer->_lineWrittenCV.notify_all();
 }
 
 
@@ -149,8 +157,8 @@ bool ProcessInputFile::GetItemString(std::string &edittedString) const
     _inputStream->getline(itemsMaxBuf, MAX_BUF_LENGTH);
     if (_inputStream->bad())
     {
-        // Break out of input loop on error or end-of-file.
-        return false;
+        edittedString = "";
+        return !_inputStream->eof();
     }
 
     std::string            itemString    = std::string(itemsMaxBuf);

@@ -38,6 +38,7 @@
   <ItemGroup>
     <Text Include="CMakeLists.txt" />
     <Text Include="In.txt" />
+    <Text Include="README.txt" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

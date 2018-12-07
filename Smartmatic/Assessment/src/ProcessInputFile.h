@@ -16,7 +16,9 @@
 #ifndef _PROCESS_INPUT_FILE_H
 #define _PROCESS_INPUT_FILE_H
 
+#include <condition_variable>
 #include <fstream>
+#include <mutex>
 #include <string>
 #include <thread>
 
@@ -52,7 +54,10 @@ private:
     ConcurrentQueue<WorkItem>            _producerQueue;
     std::vector<ItemConsumer<WorkItem> *> *_consumers;
 
-    static std::mutex _outputStreamMutex;
+    std::mutex _outputStreamMutex;
+
+    std::atomic<int>        _lineWritten;
+    std::condition_variable _lineWrittenCV;
 
 #ifdef _DEBUG
     static std::mutex _consoleMutex;
