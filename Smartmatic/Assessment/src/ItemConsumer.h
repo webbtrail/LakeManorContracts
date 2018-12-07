@@ -21,7 +21,7 @@
 #include <thread>
 
 #include "Compatibility.h"
-#include "ItemProducerQueue.h"
+#include "ConcurrentQueue.h"
 #include "WorkItem.h"
 
 
@@ -29,16 +29,15 @@
 /// <remarks>
 ///     <code> https://codereview.stackexchange.com/questions/177650/a-simple-implementation-of-the-producer-consumer-pattern </code>
 /// </remarks>
-template<typename TItem> class ItemConsumer
+template<typename TWorkItem> class ItemConsumer
 {
 private:
+    using consumer_t = void (*)(WorkItem&&);
+    using item_t = TWorkItem;
 
-    typedef void (*consumer_t)(const WorkItem &);
-    typedef TItem item_t;
-
-    std::atomic<bool>          _isRunning = ATOMIC_VAR_INIT(true);
-    consumer_t                 _consumer;
-    ItemProducerQueue<item_t> &_queue;
+    std::atomic<bool>        _isRunning = ATOMIC_VAR_INIT(true);
+    consumer_t               _consumer;
+    ConcurrentQueue<item_t> &_queue;
 
     std::thread _thread;  // Has to be initialized last.
 
@@ -48,7 +47,7 @@ public:
     /// <summary>Initializes a new instance of the <see cref="ItemConsumer"/> class.</summary>
     /// <param name="queue">The queue.</param>
     /// <param name="consumer">The consumer.</param>
-    ItemConsumer(ItemProducerQueue<item_t> &queue, consumer_t consumer)
+    ItemConsumer(ConcurrentQueue<item_t> &queue, consumer_t consumer)
         : _consumer(consumer),
           _queue(queue),
           _thread([&]()
@@ -66,25 +65,25 @@ public:
     /// <summary>Runs the specified consumer.</summary>
     void Run()
     {
-        TItem item;
         while (_isRunning)
         {
+            TWorkItem item;
             while (_isRunning && !_queue.TryPop(item))
             {
                 /* do nothing */
-                MillisecondSleep(1);
+                MillisecondSleep(10);
             }
 
             if (!_isRunning) {
                 return;
             }
 
-            _consumer(item);
+            _consumer(std::move(item));
         }
     }
 
 
-    /// <summary>Finalizes an instance of the <see cref="ItemConsumer{TItem}"/> class.</summary>
+    /// <summary>Finalizes an instance of the <see cref="ItemConsumer{TWorkItem}"/> class.</summary>
     ~ItemConsumer()
     {
         _isRunning = false;

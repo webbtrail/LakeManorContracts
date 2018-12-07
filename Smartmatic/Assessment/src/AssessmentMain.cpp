@@ -45,9 +45,9 @@
 
 #include <iostream>
 
+#include "Algorithms/HeapSort.h"
 #include "Algorithms/SortAlgorithm.h"
 #include "ProcessInputFile.h"
-#include "Algorithms/HeapSort.h"
 
 
 // Local/Static Method prototypes:

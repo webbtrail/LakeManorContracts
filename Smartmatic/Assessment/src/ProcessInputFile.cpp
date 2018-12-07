@@ -23,9 +23,9 @@
 #include <sstream>
 #include <vector>
 
-#include "Compatibility.h"
 #include "Algorithms/HeapSort.h"
 #include "Algorithms/ShellSort.h"
+#include "Compatibility.h"
 
 
 #ifdef _DEBUG
@@ -71,8 +71,9 @@ int ProcessInputFile::Process()
             break;
         }
 
-        const auto workItem = new item_t(edittedString.begin(), edittedString.end());
-        _producerQueue.Push(WorkItem(linesRead, this, &ProcessInputFile::Consumer, workItem));
+        const auto itemData = new item_t(edittedString.begin(), edittedString.end());
+        const auto workItem = new WorkItem(linesRead, this, &ProcessInputFile::Consumer, itemData);
+        _producerQueue.Push(std::move(*workItem));
     }
 
     // How long to wait is a function of the number of lines read.
@@ -106,7 +107,7 @@ void ProcessInputFile::ConsoleTrace(const std::string &msg)
 
 
 /// <summary>Consume an item in the producer queue.</summary>
-void ProcessInputFile::Consumer(const WorkItem &workItem)
+void ProcessInputFile::Consumer(WorkItem && workItem)
 {
     // Sometimes the less layered logic is easier to debug.
     // We are completely avoiding captures and closures within this class by using this older state tracking methodology.
@@ -297,11 +298,8 @@ void ProcessInputFile::WaitForQueueToEmpty(const int linesRead)
     {
         const clock_t now = clock();
         const float durationInSeconds = static_cast<float>(now - start) / CLOCKS_PER_SEC;
-        if (durationInSeconds)
-        {
-            if (durationInSeconds > maximumSecondsToWaitForQueueToEmpty) {
-                break;
-            }
+        if (durationInSeconds > maximumSecondsToWaitForQueueToEmpty) {
+            break;
         }
 
         // Wait for the queue to process

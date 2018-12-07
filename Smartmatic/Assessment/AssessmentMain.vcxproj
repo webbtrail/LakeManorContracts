@@ -32,7 +32,7 @@
     <ClInclude Include="src\Compatibility.h" />
     <ClInclude Include="src\ItemConsumer.h" />
     <ClInclude Include="src\ProcessInputFile.h" />
-    <ClInclude Include="src\ItemProducerQueue.h" />
+    <ClInclude Include="src\ConcurrentQueue.h" />
     <ClInclude Include="src\WorkItem.h" />
   </ItemGroup>
   <ItemGroup>

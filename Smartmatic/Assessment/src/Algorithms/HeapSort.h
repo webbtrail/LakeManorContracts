@@ -9,12 +9,12 @@
 //     File: HeapSort.h
 //   Author: Ron W Moore (webbtrail@gmail.com)
 //  Created: 2018-12-05, 1:37 PM
-//  Purpose:
+//  Purpose: The heap sort.
 // </summary>
 // =============================================================================================================================================
 
-#ifndef _HEAP_SORT_H
-#define _HEAP_SORT_H
+#ifndef HEAP_SORT_H
+#define HEAP_SORT_H
 
 #include <vector>
 
@@ -99,4 +99,4 @@ namespace Algorithms
     };
 }
 
-#endif  // _HEAP_SORT_H
+#endif  // HEAP_SORT_H

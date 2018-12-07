@@ -9,12 +9,12 @@
 //     File: ShellSort.h
 //   Author: Ron W Moore (webbtrail@gmail.com)
 //  Created: 2018-12-05, 4:16 PM
-//  Purpose:
+//  Purpose: The shell sort algorithm.
 // </summary>
 // =============================================================================================================================================
 
-#ifndef _SHELL_SORT_H
-#define _SHELL_SORT_H
+#ifndef SHELL_SORT_H
+#define SHELL_SORT_H
 
 #include <vector>
 
@@ -94,9 +94,9 @@ namespace Algorithms
             while (inc > 1);
         }
 
-    private:
+    //private:
     };
 }
 
 
-#endif  // _SHELL_SORT_H
+#endif  // SHELL_SORT_H

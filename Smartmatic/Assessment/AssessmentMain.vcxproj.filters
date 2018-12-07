@@ -50,9 +50,6 @@
     <ClInclude Include="src\Algorithms\HeapSort.h">
       <Filter>src\Algorithms</Filter>
     </ClInclude>
-    <ClInclude Include="src\ItemProducerQueue.h">
-      <Filter>src\Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Compatibility.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -60,6 +57,9 @@
       <Filter>src\Algorithms</Filter>
     </ClInclude>
     <ClInclude Include="src\WorkItem.h">
+      <Filter>src\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ConcurrentQueue.h">
       <Filter>src\Header Files</Filter>
     </ClInclude>
   </ItemGroup>

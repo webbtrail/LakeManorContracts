@@ -23,8 +23,8 @@ SET(src_files
 
 SET(include_files
 			./src/Compatibility.h
+			./src/ConcurrentQueue.h
 			./src/ItemConsumer.h
-			./src/ItemProducerQueue.h
 			./src/ProcessInputFile.h
 			./src/WorkItem.h
 			./src/Algorithms/HeapSort.h

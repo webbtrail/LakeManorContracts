@@ -24,12 +24,15 @@
 class ProcessInputFile;
 
 
+/// <summary>
+///     A work item tracker, including data, producer and consumer.
+///     Single/unique possession of the item data is enforced.
+/// </summary>
 class WorkItem
 {
 public:
-
-    typedef void (*consumer_t)(const WorkItem &);
-    typedef std::vector<char> item_t;
+    using consumer_t = void (*)(WorkItem&&);
+    using item_t     = std::vector<char>;
 
 private:
 
@@ -85,7 +88,9 @@ public:
           _producer(other._producer),
           _consumer(other._consumer),
           _itemData(std::move(other._itemData))
-    { }
+    {
+        other._inputID = -1;
+    }
 
 
     /// <summary>Copy assignment operator.</summary>
@@ -104,11 +109,15 @@ public:
         }
 
         _inputID  = other._inputID;
+        other._inputID = -1;
+
         _producer = other._producer;
         _consumer = other._consumer;
+
         _itemData = std::move(other._itemData);
         return *this;
     }
+
     
     /// <summary>Finalizes an instance of the <see cref="WorkItem"/> class.</summary>
     ~WorkItem() = default;

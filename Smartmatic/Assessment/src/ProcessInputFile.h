@@ -21,7 +21,7 @@
 #include <thread>
 
 #include "Algorithms/SortAlgorithm.h"
-#include "ItemProducerQueue.h"
+#include "ConcurrentQueue.h"
 #include "ItemConsumer.h"
 #include "WorkItem.h"
 
@@ -36,8 +36,8 @@ public:
     static const int MAX_LINES            = 10000;
     static const int MAX_CONSUMER_THREADS = 4;
 
-    typedef std::vector<char> item_t;
-    typedef void (*consumer_t)(const WorkItem &);
+    using item_t     = std::vector<char>;
+    using consumer_t = void (*)(WorkItem&&);
 
 private:
     // Inputs
@@ -49,7 +49,7 @@ private:
     std::unique_ptr<std::ifstream> _inputStream;
     std::ofstream                  _outputStream;
 
-    ItemProducerQueue<WorkItem>            _producerQueue;
+    ConcurrentQueue<WorkItem>            _producerQueue;
     std::vector<ItemConsumer<WorkItem> *> *_consumers;
 
     //static std::mutex _outputStreamMutex;
@@ -98,7 +98,7 @@ private:
     static void ConsoleTrace(const std::string &msg);
 
     /// <summary>Consume an item in the producer queue.</summary>
-    static void Consumer(const WorkItem &workItem);
+    static void Consumer(WorkItem && workItem);
 
     /// <summary>Get the next item string (raw) from the input stream.</summary>
     /// <param name="edittedString">The editted string.</param>

@@ -16,7 +16,7 @@
 // ReSharper disable CppUnusedIncludeDirective
 
 #ifdef _MSC_VER
-#  include <windows.h>
+#  include <windows.h>  // NOLINT(llvm-include-order)
 #  include <synchapi.h>
 #  include <corecrt_io.h>
 #else
